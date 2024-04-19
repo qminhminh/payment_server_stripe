@@ -65,8 +65,8 @@ router.post("/create-checkout-session", async (req, res) => {
     line_items,
     mode: "payment",
     customer: customer.id,
-    success_url: "https://03f3-101-44-83-16.ngrok-free.app/stripe/checkout-success",
-    cancel_url:  "https://03f3-101-44-83-16.ngrok-free.app/stripe/cancel",
+    success_url: "https://paymentserverstripe-production.up.railway.app/stripe/checkout-success",
+    cancel_url:  "https://paymentserverstripe-production.up.railway.app/stripe/cancel",
   });
 
   console.log(session.url);
