@@ -23,7 +23,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET);
 mongoose.connect(process.env.MONGO_URL).then(() => console.log("db connected")).catch((err) => console.log(err));
 
 
-const endpointSecret = "whsec_EFiHVvfetmCEjjIC6aRiJ9B3sUGLrD06";
+const endpointSecret = "we_1P7ItLJRypeCpWUQ4PfLM6E8";
 
 
 app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
@@ -87,9 +87,9 @@ app.post('/webhook', express.raw({ type: 'application/json' }), (request, respon
                 sendNotification(user.fcm, `Please wait patiently, new order : ${updatedOrder._id} is being processed`, data, "Order Placed Successfully",)
               }
 
-              if(restaurantOwner.fcm !== 'none' || user.fcm !== null){
-                sendNotification(restaurantOwner.fcm, `You have a new order : ${updatedOrder._id}. Please process the order`, data, "New Order Placed",)
-              }
+              // if(restaurantOwner.fcm !== 'none' || user.fcm !== null){
+              //   sendNotification(restaurantOwner.fcm, `You have a new order : ${updatedOrder._id}. Please process the order`, data, "New Order Placed",)
+              // }
 
 
             } else {
