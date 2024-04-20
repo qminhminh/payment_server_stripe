@@ -12,6 +12,7 @@ const User = require('./models/User');
 const Food = require('./models/Food');
 const Restaurant = require('./models/Restaurant');
 const admin = require("firebase-admin");
+const morgan = require('morgan');
 const { updateRestaurant } = require('./utils/driver_update');
 const { fireBaseConnection } = require('./utils/fbConnect');
 const sendNotification = require('./utils/sendNotifications')
@@ -23,7 +24,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET);
 mongoose.connect(process.env.MONGO_URL).then(() => console.log("db connected")).catch((err) => console.log(err));
 
 
-const endpointSecret = "we_1P7ItLJRypeCpWUQ4PfLM6E8";
+const endpointSecret = "whsec_yQfgpJTs1R2G30GekrPU1uimSiGuM2Gi";
 
 
 app.post('/webhook', express.raw({ type: 'application/json' }), (request, response) => {
@@ -65,10 +66,11 @@ app.post('/webhook', express.raw({ type: 'application/json' }), (request, respon
 
             console.log(products[0].id);
 
-            const updatedOrder = await Order.findByIdAndUpdate(products[0].id, { paymentStatus: 'Completed' }, { new: true });
+            const updatedOrder = await Order.findByIdAndUpdate(item.name, { paymentStatus: 'Completed', orderStatus:'Placed' }, { new: true });
 
 
             if (updatedOrder) {
+              await updatedOrder.save();
               const db = admin.database();
               const status = "Placed";
               updateRestaurant(updatedOrder, db, status)
@@ -113,9 +115,9 @@ app.post('/webhook', express.raw({ type: 'application/json' }), (request, respon
 
 
 app.use(cors());
+app.use(morgan('combined'));
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
-
 app.use("/stripe", stripeRouter);
 
 app.listen(process.env.PORT || port, () => console.log(`App listening on port ${process.env.PORT}!`))
