@@ -71,27 +71,27 @@ app.post('/webhook', express.raw({ type: 'application/json' }), (request, respon
 
             if (updatedOrder) {
               await updatedOrder.save();
-              // const db = admin.database();
-              // const status = "Placed";
-              // updateRestaurant(updatedOrder, db, status)
+               const db = admin.database();
+               const status = "Placed";
+               updateRestaurant(updatedOrder, db, status)
 
-              // const user = await User.findById(updatedOrder.userId.toString());
-              // const food = await Food.findById(updatedOrder.orderItems[0].foodId.toString(), { imageUrl: 1, _id: 0 });
-              // const restaurant = await Restaurant.findById(updatedOrder.restaurantId.toString(), { owner: 1, _id: 0 });
-              // const restaurantOwner = await User.findById(restaurant.owner.toString());
+               const user = await User.findById(updatedOrder.userId.toString());
+               const food = await Food.findById(updatedOrder.orderItems[0].foodId.toString(), { imageUrl: 1, _id: 0 });
+               const restaurant = await Restaurant.findById(updatedOrder.restaurantId.toString(), { owner: 1, _id: 0 });
+               const restaurantOwner = await User.findById(restaurant.owner.toString());
 
-              // const data = {
-              //   orderId: updatedOrder._id.toString(),
-              //   imageUrl: food.imageUrl[0],
-              // };
+               const data = {
+                 orderId: updatedOrder._id.toString(),
+                 imageUrl: food.imageUrl[0],
+               };
 
-              // if(user.fcm !== 'none'){
-              //   sendNotification(user.fcm, `Please wait patiently, new order : ${updatedOrder._id} is being processed`, data, "Order Placed Successfully",)
-              // }
+               if(user.fcm !== 'none'){
+                 sendNotification(user.fcm, `Please wait patiently, new order : ${updatedOrder._id} is being processed`, data, "Order Placed Successfully",)
+               }
 
-              // if(restaurantOwner.fcm !== 'none' || user.fcm !== null){
-              //   sendNotification(restaurantOwner.fcm, `You have a new order : ${updatedOrder._id}. Please process the order`, data, "New Order Placed",)
-              // }
+               if(restaurantOwner.fcm !== 'none' || user.fcm !== null){
+                 sendNotification(restaurantOwner.fcm, `You have a new order : ${updatedOrder._id}. Please process the order`, data, "New Order Placed",)
+               }
 
 
             } else {
